@@ -41,8 +41,8 @@
 			    <param name="onload" value="true"/>
 		    </feature>
             <preference name="CordovaLocalWebServerStartOnSimulator" value="true" />
-			<access origin="http://localhost" />
-      <allow-navigation href="http://localhost:*/*" />
+			<access origin="http://local.pdc.org" />
+      <allow-navigation href="http://local.pdc.org:*/*" />
         </config-file>
 		
         

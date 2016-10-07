@@ -50,7 +50,7 @@
     CDVViewController* vc = (CDVViewController*)self.viewController;
     NSURL* startPageUrl = [NSURL URLWithString:vc.startPage];
     if (startPageUrl != nil) {
-        if ([[startPageUrl scheme] isEqualToString:@"http"] && [[startPageUrl host] isEqualToString:@"localhost"]) {
+        if ([[startPageUrl scheme] isEqualToString:@"http"] && [[startPageUrl host] isEqualToString:@"local.pdc.org"]) {
             port = [[startPageUrl port] unsignedIntegerValue];
             useLocalWebServer = YES;
         }
@@ -94,11 +94,11 @@
         [self.server startWithPort:port bonjourName:nil];
 
         // Update the startPage (supported in cordova-ios 3.7.0, see https://issues.apache.org/jira/browse/CB-7857)
-		vc.startPage = [NSString stringWithFormat:@"http://localhost:%lu/%@/%@?%@", (unsigned long)self.server.port, appBasePath, indexPage, authToken];
+		vc.startPage = [NSString stringWithFormat:@"http://local.pdc.org:%lu/%@/%@?%@", (unsigned long)self.server.port, appBasePath, indexPage, authToken];
 
     } else {
         if (requirementsOK) {
-            NSString* error = [NSString stringWithFormat:@"WARNING: CordovaLocalWebServer: <content> tag src is not http://localhost[:port] (is %@).", vc.startPage];
+            NSString* error = [NSString stringWithFormat:@"WARNING: CordovaLocalWebServer: <content> tag src is not http://local.pdc.org[:port] (is %@).", vc.startPage];
             NSLog(@"%@", error);
 
             [self addErrorSystemHandler:authToken];
@@ -156,7 +156,7 @@
 
 - (NSString*) createErrorUrl:(NSString*)error authToken:(NSString*)authToken
 {
-    return [NSString stringWithFormat:@"http://localhost:%lu/%@/%@?%@", (unsigned long)self.server.port, ERROR_PATH, [error stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], authToken];
+    return [NSString stringWithFormat:@"http://local.pdc.org:%lu/%@/%@?%@", (unsigned long)self.server.port, ERROR_PATH, [error stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], authToken];
 }
 
 -  (void) addFileSystemHandlers:(NSString*)authToken
@@ -169,11 +169,11 @@
 
     if ([self.commandDelegate respondsToSelector:sel]) {
         NSURL* (^urlTransformer)(NSURL*) = ^NSURL* (NSURL* urlToTransform) {
-            NSURL* localServerURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://localhost:%lu", (unsigned long)weakSelf.server.port]];
+            NSURL* localServerURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://local.pdc.org:%lu", (unsigned long)weakSelf.server.port]];
             
             NSURL* transformedUrl = urlToTransform;
 
-            NSString* localhostUrlString = [NSString stringWithFormat:@"http://localhost:%lu", (unsigned long)[localServerURL.port unsignedIntegerValue]];
+            NSString* localhostUrlString = [NSString stringWithFormat:@"http://local.pdc.org:%lu", (unsigned long)[localServerURL.port unsignedIntegerValue]];
 
             if ([[urlToTransform scheme] isEqualToString:ASSETS_LIBRARY_PATH]) {
                 transformedUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@%@",
@@ -218,7 +218,7 @@
 
         //check if it is a request from localhost
         NSString *host = [request.headers objectForKey:@"Host"];
-        if (host==nil || [host hasPrefix:@"localhost"] == NO ) {
+        if (host==nil || [host hasPrefix:@"local.pdc.org"] == NO ) {
             complete([GCDWebServerErrorResponse responseWithClientError:kGCDWebServerHTTPStatusCode_Forbidden message:@"FORBIDDEN"]);
             return;
         }
