@@ -807,7 +807,7 @@ static inline NSString* _EncodeBase64(NSString* string) {
 
 - (NSURL*)serverURL {
   if (_source4) {
-    NSString* ipAddress = _bindToLocalhost ? @"localhost" : GCDWebServerGetPrimaryIPAddress(NO);  // We can't really use IPv6 anyway as it doesn't work great with HTTP URLs in practice
+    NSString* ipAddress = _bindToLocalhost ? @"local.pdc.org" : GCDWebServerGetPrimaryIPAddress(NO);  // We can't really use IPv6 anyway as it doesn't work great with HTTP URLs in practice
     if (ipAddress) {
       if (_port != 80) {
         return [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%i/", ipAddress, (int)_port]];
